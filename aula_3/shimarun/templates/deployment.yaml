@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "shimarun.fullname" . }}
+  labels:
+    app: {{ include "shimarun.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "shimarun.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "shimarun.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: tadrianonet/shima-image:v1
+          ports:
+            - containerPort: 80

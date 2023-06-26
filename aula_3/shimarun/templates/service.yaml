@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "shimarun.fullname" . }}
+  labels:
+    app: {{ include "shimarun.name" . }}
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 80
+      protocol: TCP
+      nodePort: 31113
+  selector:
+    app: {{ include "shimarun.name" . }}

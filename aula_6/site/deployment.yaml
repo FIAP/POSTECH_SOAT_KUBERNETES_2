@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fiap-siteeks
+  labels:
+    app: fiap-siteeks
+spec:
+  template:
+    metadata:
+      name: fiap-siteeks
+      labels:
+        app: fiap-siteeks
+    spec:
+      containers:
+        - name:  c-siteeks
+          image: tadrianonet/siteeks:v4
+          ports:
+            - containerPort: 80         
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 1m
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fiap-siteeks

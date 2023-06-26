@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: api-svc
+  name: api-loadbalancer-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: api-pod
+  type: LoadBalancer

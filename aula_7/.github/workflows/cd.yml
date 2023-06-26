@@ -1,0 +1,34 @@
+name: Deploy to EKS
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name fiap-k8s-cluster --region us-east-1
+
+      - name: Login to DockerHub
+        run: docker login -u tadrianonet -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t tadrianonet/k8scifiap .
+          docker push tadrianonet/k8scifiap
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f node-deployment.yaml 
+          kubectl apply -f node-service.yaml 

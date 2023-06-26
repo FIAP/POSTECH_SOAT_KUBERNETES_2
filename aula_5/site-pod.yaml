@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: site-pod
+  labels:
+    app: site-pod
+spec:
+  containers:
+    - name: site-pod-config
+      image: tadrianonet/siteeks:v2

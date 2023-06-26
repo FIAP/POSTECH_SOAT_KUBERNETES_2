@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fiap-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: c-cronjob
+              image: tadrianonet/cronjobk8s
+              env:
+                - name: MONGO_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: db-config
+                      key: MONGO_URL
+          restartPolicy: OnFailure
