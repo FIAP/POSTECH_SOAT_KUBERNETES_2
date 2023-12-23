@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-node-cicd-deployment
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80      
+      targetPort: 3000
+  selector:
+    app: node-cicd-deployment
